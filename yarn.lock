@@ -437,7 +437,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.7"
 
-"@babel/plugin-transform-arrow-functions@^7.0.0":
+"@babel/plugin-transform-arrow-functions@^7.0.0", "@babel/plugin-transform-arrow-functions@^7.0.0-0":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-arrow-functions/-/plugin-transform-arrow-functions-7.24.7.tgz#4f6886c11e423bd69f3ce51dbf42424a5f275514"
   integrity sha512-Dt9LQs6iEY++gXUwY03DNFat5C2NbO48jj+j/bSAz6b3HgPs39qcPiYt77fDObIcFwj3/C2ICX9YMwGflUoSHQ==
@@ -460,7 +460,15 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.8"
 
-"@babel/plugin-transform-classes@^7.0.0":
+"@babel/plugin-transform-class-properties@^7.0.0-0":
+  version "7.24.7"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-class-properties/-/plugin-transform-class-properties-7.24.7.tgz#256879467b57b0b68c7ddfc5b76584f398cd6834"
+  integrity sha512-vKbfawVYayKcSeSR5YYzzyXvsDFWU2mD8U5TFeXtbCPLFUqe7GyCgvO6XDHzje862ODrOwy6WCPmKeWHbCFJ4w==
+  dependencies:
+    "@babel/helper-create-class-features-plugin" "^7.24.7"
+    "@babel/helper-plugin-utils" "^7.24.7"
+
+"@babel/plugin-transform-classes@^7.0.0", "@babel/plugin-transform-classes@^7.0.0-0":
   version "7.25.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-classes/-/plugin-transform-classes-7.25.0.tgz#63122366527d88e0ef61b612554fe3f8c793991e"
   integrity sha512-xyi6qjr/fYU304fiRwFbekzkqVJZ6A7hOjWZd+89FVcBqPV3S9Wuozz82xdpLspckeaafntbzglaW4pqpzvtSw==
@@ -536,6 +544,14 @@
     "@babel/helper-create-regexp-features-plugin" "^7.24.7"
     "@babel/helper-plugin-utils" "^7.24.7"
 
+"@babel/plugin-transform-nullish-coalescing-operator@^7.0.0-0":
+  version "7.24.7"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-nullish-coalescing-operator/-/plugin-transform-nullish-coalescing-operator-7.24.7.tgz#1de4534c590af9596f53d67f52a92f12db984120"
+  integrity sha512-Ts7xQVk1OEocqzm8rHMXHlxvsfZ0cEF2yomUqpKENHWMF4zKk175Y4q8H5knJes6PgYad50uuRmt3UJuhBw8pQ==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.7"
+    "@babel/plugin-syntax-nullish-coalescing-operator" "^7.8.3"
+
 "@babel/plugin-transform-object-rest-spread@^7.12.13":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-rest-spread/-/plugin-transform-object-rest-spread-7.24.7.tgz#d13a2b93435aeb8a197e115221cab266ba6e55d6"
@@ -545,6 +561,15 @@
     "@babel/helper-plugin-utils" "^7.24.7"
     "@babel/plugin-syntax-object-rest-spread" "^7.8.3"
     "@babel/plugin-transform-parameters" "^7.24.7"
+
+"@babel/plugin-transform-optional-chaining@^7.0.0-0":
+  version "7.24.8"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-optional-chaining/-/plugin-transform-optional-chaining-7.24.8.tgz#bb02a67b60ff0406085c13d104c99a835cdf365d"
+  integrity sha512-5cTOLSMs9eypEy8JUVvIKOu6NgvbJMnpG62VpIHrTmROdQ+L5mDAaI40g25k5vXti55JWNX5jCkq3HZxXBQANw==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.8"
+    "@babel/helper-skip-transparent-expression-wrappers" "^7.24.7"
+    "@babel/plugin-syntax-optional-chaining" "^7.8.3"
 
 "@babel/plugin-transform-parameters@^7.0.0", "@babel/plugin-transform-parameters@^7.20.7", "@babel/plugin-transform-parameters@^7.22.15", "@babel/plugin-transform-parameters@^7.24.7":
   version "7.24.7"
@@ -630,7 +655,7 @@
     babel-plugin-polyfill-regenerator "^0.6.1"
     semver "^6.3.1"
 
-"@babel/plugin-transform-shorthand-properties@^7.0.0":
+"@babel/plugin-transform-shorthand-properties@^7.0.0", "@babel/plugin-transform-shorthand-properties@^7.0.0-0":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-shorthand-properties/-/plugin-transform-shorthand-properties-7.24.7.tgz#85448c6b996e122fa9e289746140aaa99da64e73"
   integrity sha512-KsDsevZMDsigzbA09+vacnLpmPH4aWjcZjXdyFKGzpplxhbeB4wYtury3vglQkg6KM/xEPKt73eCjPPf1PgXBA==
@@ -652,6 +677,13 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.7"
 
+"@babel/plugin-transform-template-literals@^7.0.0-0":
+  version "7.24.7"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-template-literals/-/plugin-transform-template-literals-7.24.7.tgz#a05debb4a9072ae8f985bcf77f3f215434c8f8c8"
+  integrity sha512-AfDTQmClklHCOLxtGoP7HkeMw56k1/bTQjwsfhL6pppo/M4TOBSq+jjBUBLmV/4oeFg4GWMavIl44ZeCtmmZTw==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.7"
+
 "@babel/plugin-transform-typescript@^7.24.7", "@babel/plugin-transform-typescript@^7.5.0":
   version "7.25.2"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-typescript/-/plugin-transform-typescript-7.25.2.tgz#237c5d10de6d493be31637c6b9fa30b6c5461add"
@@ -663,7 +695,7 @@
     "@babel/helper-skip-transparent-expression-wrappers" "^7.24.7"
     "@babel/plugin-syntax-typescript" "^7.24.7"
 
-"@babel/plugin-transform-unicode-regex@^7.0.0":
+"@babel/plugin-transform-unicode-regex@^7.0.0", "@babel/plugin-transform-unicode-regex@^7.0.0-0":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-unicode-regex/-/plugin-transform-unicode-regex-7.24.7.tgz#dfc3d4a51127108099b19817c0963be6a2adf19f"
   integrity sha512-hlQ96MBZSAXUq7ltkjtu3FJCCSMx/j629ns3hA3pXnBXjanNP0LHi+JpPeA81zaWgVK1VGH95Xuy7u0RyQ8kMg==
@@ -692,7 +724,7 @@
     "@babel/plugin-transform-react-jsx-development" "^7.24.7"
     "@babel/plugin-transform-react-pure-annotations" "^7.24.7"
 
-"@babel/preset-typescript@^7.13.0", "@babel/preset-typescript@^7.23.0":
+"@babel/preset-typescript@^7.13.0", "@babel/preset-typescript@^7.16.7", "@babel/preset-typescript@^7.23.0":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/preset-typescript/-/preset-typescript-7.24.7.tgz#66cd86ea8f8c014855671d5ea9a737139cbbfef1"
   integrity sha512-SyXRe3OdWwIwalxDg5UtJnJQO+YPcTfwiIY2B0Xlddh9o7jpWLvv8X1RthIeDOxQ+O1ML5BLPCONToObyVQVuQ==
@@ -5878,6 +5910,11 @@ expo-status-bar@~1.12.1:
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.12.1.tgz#52ce594aab5064a0511d14375364d718ab78aa66"
   integrity sha512-/t3xdbS8KB0prj5KG5w7z+wZPFlPtkgs95BsmrP/E7Q0xHXTcDcQ6Cu2FkFuRM+PKTb17cJDnLkawyS5vDLxMA==
 
+expo-web-browser@^13.0.3:
+  version "13.0.3"
+  resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-13.0.3.tgz#dceb05dbc187b498ca937b02adf385b0232a4e92"
+  integrity sha512-HXb7y82ApVJtqk8tManyudtTrCtx8xcUnVzmJECeHCB0SsWSQ+penVLZxJkcyATWoJOsFMnfVSVdrTcpKKGszQ==
+
 expo@^51.0.25:
   version "51.0.25"
   resolved "https://registry.yarnpkg.com/expo/-/expo-51.0.25.tgz#2549b61b124bd838504aa34cf7ac97db97368a7d"
@@ -9325,6 +9362,23 @@ react-native-helmet-async@2.0.4:
     invariant "^2.2.4"
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
+
+react-native-reanimated@^3.15.0:
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.15.0.tgz#8814af7c78bbdf4c92bbd583f2266febf962e66a"
+  integrity sha512-yGxOyYAAu/5CyjonM2SgsM5sviiiK8HiHL9jT1bKfRxMLnNX9cFP8/UXRkbMT7ZXIfOlCvNFR0AqnphpuXIPVA==
+  dependencies:
+    "@babel/plugin-transform-arrow-functions" "^7.0.0-0"
+    "@babel/plugin-transform-class-properties" "^7.0.0-0"
+    "@babel/plugin-transform-classes" "^7.0.0-0"
+    "@babel/plugin-transform-nullish-coalescing-operator" "^7.0.0-0"
+    "@babel/plugin-transform-optional-chaining" "^7.0.0-0"
+    "@babel/plugin-transform-shorthand-properties" "^7.0.0-0"
+    "@babel/plugin-transform-template-literals" "^7.0.0-0"
+    "@babel/plugin-transform-unicode-regex" "^7.0.0-0"
+    "@babel/preset-typescript" "^7.16.7"
+    convert-source-map "^2.0.0"
+    invariant "^2.2.4"
 
 react-native-safe-area-context@4.10.5:
   version "4.10.5"

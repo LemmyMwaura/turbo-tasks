@@ -1,1 +1,3 @@
-export { Button, type ButtonProps } from "./button";
+export { Button, type ButtonProps } from './components/button'
+export { ThemedText, type ThemedTextProps } from './components/ThemedText'
+export { ThemedView, type ThemedViewProps } from './components/ThemedView'

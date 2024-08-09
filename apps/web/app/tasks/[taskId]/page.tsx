@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { TaskForm } from '@app/components/TaskForm'
 import { useTaskStore } from '@app/providers/task.store'
 
-import { Task } from '@repo/ui'
+import { Task } from '@app/types/task.types'
 
 const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   const router = useRouter()
@@ -27,18 +27,16 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   }
 
   const handleDelete = () => {
-    if (task?.id) {
-      removeTask(taskId)
-      router.push('/tasks')
-    }
+    removeTask(taskId)
+    router.push('/tasks')
+  }
+
+  if (!taskId) {
+    router.push('/not-found')
   }
 
   if (!task) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen bg-[#f5e0dc]">
-        <p className="text-red-600 text-xl">Task not found</p>
-      </div>
-    )
+    return null
   }
 
   return (

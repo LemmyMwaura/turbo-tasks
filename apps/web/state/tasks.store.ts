@@ -1,12 +1,14 @@
 import { createStore } from 'zustand/vanilla'
-import { DEMOTASKS, Task } from '@repo/ui'
+
+import { Task } from '@app/types/task.types'
+import { DEMOTASKS } from '@app/utils/seed.tasks'
 
 const initTaskState = {
   tasks: DEMOTASKS,
 }
 
 // Note: We experienced intermittent issues with Zustand state persistence using local storage during hydration. As a result, we are temporarily avoiding local storage for state management.
-// TODO@LemmyMwaura: downgrade to safer nextjs version
+// TODO@: downgrade to safer nextjs version
 
 export interface TaskStore {
   tasks: Task[]
@@ -20,13 +22,11 @@ export const createTaskStore = () => {
   return createStore<TaskStore>()((set, get) => ({
     ...initTaskState,
     addTask: (task: Task) => {
-      console.log('Adding task:', task)
       set((state) => ({
         tasks: [...state.tasks, task],
       }))
     },
     updateTask: (id: string, updatedTask: Partial<Task>) => {
-      console.log('Updating task:', id, updatedTask)
       set((state) => ({
         tasks: state.tasks.map((task) =>
           task.id === id ? { ...task, ...updatedTask } : task
@@ -34,7 +34,6 @@ export const createTaskStore = () => {
       }))
     },
     removeTask: (id: string) => {
-      console.log('Removing task:', id)
       set((state) => ({
         tasks: state.tasks.filter((task) => task.id !== id),
       }))
@@ -42,7 +41,6 @@ export const createTaskStore = () => {
     getTaskById: (id: string) => {
       const { tasks } = get()
       const task = tasks.find((task) => task.id === id)
-      console.log('Getting task by id:', id, task)
       return task
     },
   }))

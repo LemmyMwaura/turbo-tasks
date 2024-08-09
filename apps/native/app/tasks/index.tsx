@@ -6,7 +6,6 @@ import {
   FlatList,
   Pressable,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -14,18 +13,11 @@ import { StatusBar } from 'expo-status-bar'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 
 import { Task } from '@app/types/task.types'
-import { useGetTasks } from '@app/hooks/useFetchHooks'
-import { storeData } from '@app/state/async.state'
-import { DEMOTASKS } from '@app/utils/seed.tasks'
-
-const QUERYKEY = 'tasks'
+import { useTaskStore } from '@app/state/tasks.store'
 
 export default function TasksPage() {
   const router = useRouter()
-  const { data: tasks, error, isLoading } = useGetTasks()
-
-  // uncomment to seed your local store
-  // storeData(QUERYKEY, DEMOTASKS)
+  const { tasks } = useTaskStore((store) => store)
 
   const onItemPressed = (task: Task) => {
     router.push(`/tasks/${task.id}`)
@@ -33,24 +25,6 @@ export default function TasksPage() {
 
   const onAddTaskPressed = () => {
     router.push('/tasks/new-task')
-  }
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#89b4fa" />
-        <Text>Loading tasks...</Text>
-      </View>
-    )
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Failed to load tasks.</Text>
-        <Text>{(error as Error).message}</Text>
-      </View>
-    )
   }
 
   return (
@@ -82,7 +56,7 @@ export default function TasksPage() {
             </Text>
           </Pressable>
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id as string}
       />
 
       <TouchableOpacity style={styles.addButton} onPress={onAddTaskPressed}>

@@ -1,5 +1,5 @@
-import { Task } from '../types/task.types'
-import { v4 as uuid } from 'uuid'
+import { Task } from '@app/types/task.types'
+import { v4 as uuid } from 'uuidv4'
 
 export const DEMOTASKS: Task[] = [
   {

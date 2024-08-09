@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 
-import { Task } from '@repo/ui'
+import { Task } from '@app/types/task.types'
 import React from 'react'
 
 const TaskItem = ({ task }: { task: Task }) => {

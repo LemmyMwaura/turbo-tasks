@@ -7,49 +7,40 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import Modal from 'react-native-modal'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
 
 import { Task } from '@app/types/task.types'
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
 import { DeleteConfirmationModal } from '@app/components/DeleteFormModal'
-import { useUpdateTaskMutation } from '@app/hooks/useUpdateMutation'
-import { useDeleteMutation } from '@app/hooks/useDeleteMutation'
+import { useTaskStore } from '@app/state/tasks.store'
 
 export default function TaskDetailsPage() {
-  const queryClient = useQueryClient()
-  const router = useRouter()
   const { taskId } = useLocalSearchParams<{ taskId: string }>()
 
-  const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
-  const task = existingTasks.find((task) => task.id === taskId)
+  const { tasks, updateTask, removeTask } = useTaskStore((store) => store)
+  const task = tasks.find((task) => task.id === taskId)
 
   const [modalVisible, setModalVisible] = useState(false)
   const [delModalVisible, setDelModalVisible] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     task?.dueDate ? new Date(task.dueDate) : undefined
   )
+
   const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const editMutation = useUpdateTaskMutation({
-    onComplete: () => setModalVisible(false),
-  })
-
-  const delMutation = useDeleteMutation({
-    onComplete: () => {
-      router.push('/tasks')
-    },
-  })
-
   const handleUpdateTask = (data: Task) => {
-    if (task) {
-      editMutation.mutate({ ...task, ...data })
+    if (data) {
+      data.id = taskId
+      updateTask(data)
+      setModalVisible(false)
+      router.replace(`/tasks/${taskId}`)
     }
   }
 
   const handleDelete = () => {
     if (task && task.id) {
-      delMutation.mutate(task.id)
+      removeTask(taskId)
+      router.replace('/tasks')
     }
   }
 

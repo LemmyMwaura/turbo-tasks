@@ -3,11 +3,11 @@
 import { Task } from '@repo/ui'
 import TaskItem from './TaskItem'
 
-interface TaskListProps {
+type Props = {
   tasks: Task[]
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
+export const TaskList: React.FC<Props> = ({ tasks }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-3 w-full">
       {tasks.map((task) => (
@@ -16,5 +16,3 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     </div>
   )
 }
-
-export default TaskList

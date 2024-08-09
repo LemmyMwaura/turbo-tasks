@@ -1,24 +1,28 @@
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+
+import { randomUUID } from 'expo-crypto'
 import { useRouter, Stack } from 'expo-router'
 
 import { Task } from '@app/types/task.types'
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
-import { useCreateTaskMutation } from '@app/hooks/useCreateMutation'
+import { useTaskStore } from '@app/state/tasks.store'
 
 export default function NewTaskPage() {
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date>()
   const router = useRouter()
 
-  const mutation = useCreateTaskMutation({
-    onComplete: () => {
-      router.push('/tasks')
-    },
-  })
+  const { addTask } = useTaskStore((store) => store)
 
   const onSubmit = (data: Task) => {
-    mutation.mutate(data)
+    const newTask = {
+      ...data,
+      id: randomUUID(),
+    }
+
+    addTask(newTask)
+    router.push('/tasks')
   }
 
   return (

@@ -23,10 +23,11 @@ export default function TaskDetailsPage() {
     <ScrollView contentContainerStyle={styles.container}>
       <Stack.Screen
         options={{
-          title: `Task - ${task.id}`,
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
+          title: 'Task',
+          headerShadowVisible: false,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: 'rgba(245, 224, 220, 0.8)',
           },
         }}
       />
@@ -69,20 +70,12 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: 'rgba(245, 224, 220, 0.8)',
   },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
   },
   title: {
     fontSize: 24,

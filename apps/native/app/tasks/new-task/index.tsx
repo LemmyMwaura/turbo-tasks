@@ -78,126 +78,136 @@ export default function NewTaskPage() {
         }}
       />
 
-      <Text style={styles.header}>Create New Task</Text>
+      <View style={styles.card}>
+        <Text style={styles.header}>Create New Task</Text>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Task Title</Text>
-        <Controller
-          control={control}
-          name="title"
-          render={({
-            field: { onChange, onBlur, value },
-            fieldState: { error },
-          }) => (
-            <>
-              <TextInput
-                style={[styles.input, error && styles.errorInput]}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Enter task title"
-                placeholderTextColor="#999"
-              />
-              {error && (
-                <Text style={styles.errorText}>{error?.message as string}</Text>
-              )}
-            </>
-          )}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Description</Text>
-        <Controller
-          control={control}
-          name="description"
-          render={({
-            field: { onChange, onBlur, value },
-            fieldState: { error },
-          }) => (
-            <>
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Enter task description"
-                placeholderTextColor="#999"
-                multiline
-                numberOfLines={3}
-              />
-              {error && (
-                <Text style={styles.errorText}>{error?.message as string}</Text>
-              )}
-            </>
-          )}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Due Date</Text>
-        <Controller
-          control={control}
-          name="dueDate"
-          render={({ field: { onChange }, fieldState: { error } }) => (
-            <>
-              <TouchableOpacity
-                style={styles.dateButton}
-                onPress={() => setShowDatePicker(true)}
-              >
-                <Text style={styles.dateButtonText}>
-                  {selectedDate ? selectedDate.toDateString() : 'Select Date'}
-                </Text>
-              </TouchableOpacity>
-              {showDatePicker && (
-                <DateTimePicker
-                  value={selectedDate ?? new Date()}
-                  mode="date"
-                  display="default"
-                  onChange={(e, date) => {
-                    handleDateChange(e, date)
-                    if (date) onChange(date)
-                  }}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Task Title</Text>
+          <Controller
+            control={control}
+            name="title"
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
+              <>
+                <TextInput
+                  style={[styles.input, error && styles.errorInput]}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Enter task title"
+                  placeholderTextColor="#999"
                 />
-              )}
-              {error && (
-                <Text style={styles.errorText}>{error?.message as string}</Text>
-              )}
-            </>
-          )}
-        />
-      </View>
+                {error && (
+                  <Text style={styles.errorText}>
+                    {error?.message as string}
+                  </Text>
+                )}
+              </>
+            )}
+          />
+        </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Status</Text>
-        <Controller
-          control={control}
-          name="status"
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <>
-              <Picker
-                selectedValue={value}
-                onValueChange={onChange}
-                style={styles.input}
-              >
-                <Picker.Item label="Pending" value="pending" />
-                <Picker.Item label="In Progress" value="in-progress" />
-                <Picker.Item label="Completed" value="completed" />
-              </Picker>
-              {error && (
-                <Text style={styles.errorText}>{error?.message as string}</Text>
-              )}
-            </>
-          )}
-        />
-      </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Description</Text>
+          <Controller
+            control={control}
+            name="description"
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { error },
+            }) => (
+              <>
+                <TextInput
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Enter task description"
+                  placeholderTextColor="#999"
+                  multiline
+                  numberOfLines={3}
+                />
+                {error && (
+                  <Text style={styles.errorText}>
+                    {error?.message as string}
+                  </Text>
+                )}
+              </>
+            )}
+          />
+        </View>
 
-      <TouchableOpacity
-        style={styles.submitButton}
-        onPress={handleSubmit(onSubmit)}
-      >
-        <Text style={styles.submitButtonText}>Add Task</Text>
-      </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Due Date</Text>
+          <Controller
+            control={control}
+            name="dueDate"
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <>
+                <TouchableOpacity
+                  style={styles.dateButton}
+                  onPress={() => setShowDatePicker(true)}
+                >
+                  <Text style={styles.dateButtonText}>
+                    {selectedDate ? selectedDate.toDateString() : 'Select Date'}
+                  </Text>
+                </TouchableOpacity>
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={selectedDate ?? new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(e, date) => {
+                      handleDateChange(e, date)
+                      if (date) onChange(date)
+                    }}
+                  />
+                )}
+                {error && (
+                  <Text style={styles.errorText}>
+                    {error?.message as string}
+                  </Text>
+                )}
+              </>
+            )}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Status</Text>
+          <Controller
+            control={control}
+            name="status"
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <>
+                <Picker
+                  selectedValue={value}
+                  onValueChange={onChange}
+                  style={styles.input}
+                >
+                  <Picker.Item label="Pending" value="pending" />
+                  <Picker.Item label="In Progress" value="in-progress" />
+                  <Picker.Item label="Completed" value="completed" />
+                </Picker>
+                {error && (
+                  <Text style={styles.errorText}>
+                    {error?.message as string}
+                  </Text>
+                )}
+              </>
+            )}
+          />
+        </View>
+
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <Text style={styles.submitButtonText}>Add Task</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -205,9 +215,14 @@ export default function NewTaskPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'rgba(245, 224, 220, 0.8)',
     padding: 20,
     paddingTop: 50,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 25,
+    borderRadius: 10,
   },
   header: {
     fontSize: 28,

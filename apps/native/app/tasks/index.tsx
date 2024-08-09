@@ -13,10 +13,9 @@ import { StatusBar } from 'expo-status-bar'
 import { useQuery } from '@tanstack/react-query'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-
-import { getData, storeData } from '@app/state/async.state'
+ 
+import { getData } from '@app/state/async.state'
 import { Task } from '@app/types/task.types'
-import { DEMOTASKS } from '@app/utils/seed.tasks'
 
 const QUERYKEY = 'tasks'
 

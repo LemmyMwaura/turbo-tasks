@@ -6,13 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { randomUUID } from 'expo-crypto'
 import { useForm, Controller } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Picker } from '@react-native-picker/picker'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker'
 
 import { Task, TaskForm, taskFormSchema } from '@app/types/task.types'
 import { storeData } from '@app/state/async.state'
@@ -25,9 +27,11 @@ export default function NewTaskPage() {
   const [selectedDate, setSelectedDate] = useState<Date>()
   const queryClient = useQueryClient()
 
-  const handleDateChange = (event: any, date?: Date) => {
+  const handleDateChange = (_event: DateTimePickerEvent, date?: Date) => {
     setShowDatePicker(false)
-    if (date) setSelectedDate(date)
+    if (date) {
+      setSelectedDate(date)
+    }
   }
 
   const { control, handleSubmit } = useForm<TaskForm>({
@@ -40,6 +44,7 @@ export default function NewTaskPage() {
       const newTask = {
         ...data,
         id: randomUUID(),
+        dueDate: selectedDate as Date,
       }
 
       const existingTasks = queryClient.getQueryData<Task[]>([QUERYKEY]) || []
@@ -62,6 +67,17 @@ export default function NewTaskPage() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          title: 'Add New Task',
+          headerShadowVisible: false,
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: 'rgba(245, 224, 220, 0.8)',
+          },
+        }}
+      />
+
       <Text style={styles.header}>Create New Task</Text>
 
       <View style={styles.inputContainer}>
@@ -140,7 +156,7 @@ export default function NewTaskPage() {
                   display="default"
                   onChange={(e, date) => {
                     handleDateChange(e, date)
-                    onChange(date)
+                    if (date) onChange(date)
                   }}
                 />
               )}

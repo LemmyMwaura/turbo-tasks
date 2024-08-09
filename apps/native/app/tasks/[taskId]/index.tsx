@@ -1,11 +1,15 @@
 import { Text, StyleSheet, View, ScrollView } from 'react-native'
 import { Stack, useLocalSearchParams } from 'expo-router'
 
-import { DEMOTASKS } from '@app/utils/seed.tasks'
+import { useQueryClient } from '@tanstack/react-query'
+import { Task } from '@app/types/task.types'
 
 export default function TaskDetailsPage() {
+  const queryClient = useQueryClient()
   const { taskId } = useLocalSearchParams<{ taskId: string }>()
-  const task = DEMOTASKS.find((task) => task.id === taskId)
+
+  const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
+  const task = existingTasks.find((task) => task.id === taskId)
 
   if (!task) {
     return (
@@ -44,7 +48,17 @@ export default function TaskDetailsPage() {
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Due Date:</Text>
-          <Text style={styles.value}>{task.dueDate.toISOString()}</Text>
+          <Text style={styles.value}>
+            {task?.dueDate
+              ? new Date(task.dueDate)
+                  .toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                  .replace(/(\d{1,2})(st|nd|rd|th)?/, (day) => `${day}th`)
+              : ''}
+          </Text>
         </View>
       </View>
     </ScrollView>

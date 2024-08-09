@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,26 +6,50 @@ import {
   FlatList,
   Pressable,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import { DEMOTASKS } from '@app/utils/seed.tasks'
+import { useQuery } from '@tanstack/react-query'
 
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+
+import { getData } from '@app/state/async.state'
 import { Task } from '@app/types/task.types'
 
+const QUERYKEY = 'tasks'
+
 export default function TasksPage() {
-  const [tasks, setTask] = useState<Task[]>(DEMOTASKS)
   const router = useRouter()
+  const { data: tasks, error, isLoading } = useQuery({
+    queryKey: [QUERYKEY],
+    queryFn: () => getData(QUERYKEY),
+  })
 
   const onItemPressed = (task: Task) => {
-    // newTasks[index] = { ...task, isCompleted: !task.isCompleted }
-    // setTask(newTasks)
     router.push(`/tasks/${task.id}`)
   }
 
   const onAddTaskPressed = () => {
     router.push('/tasks/new-task')
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#89b4fa" />
+        <Text>Loading tasks...</Text>
+      </View>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Failed to load tasks.</Text>
+        <Text>{(error as Error).message}</Text>
+      </View>
+    )
   }
 
   return (
@@ -57,6 +81,7 @@ export default function TasksPage() {
             </Text>
           </Pressable>
         )}
+        keyExtractor={(item) => item.id.toString()}
       />
 
       <TouchableOpacity style={styles.addButton} onPress={onAddTaskPressed}>
@@ -75,13 +100,19 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 50,
   },
-  header: {
-    paddingBottom: 20,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: 25,
-    fontWeight: 'bold',
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    color: '#F44336',
+    marginBottom: 10,
   },
   taskList: {
     gap: 20,

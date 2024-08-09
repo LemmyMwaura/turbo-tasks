@@ -1,16 +1,6 @@
 import { z } from 'zod'
 
-// export const taskSchema = z
-//   .object({
-//     id: z.string(),
-//     title: z.string(),
-//     description: z.string(),
-//     dueDate: z.date(),
-//     isCompleted: z.boolean(),
-//   })
-//   .strict()
-
-const taskSchema = z
+export const taskSchema = z
   .object({
     id: z.string(),
     title: z
@@ -24,4 +14,7 @@ const taskSchema = z
   })
   .strict()
 
+export const taskFormSchema = taskSchema.omit({ id: true })
+
+export type TaskForm = z.infer<typeof taskFormSchema>
 export type Task = z.infer<typeof taskSchema>

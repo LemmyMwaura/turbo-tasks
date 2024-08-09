@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import React, { useState } from 'react'
 import {
   StyleSheet,
@@ -8,42 +7,57 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import { useRouter } from 'expo-router'
+import { randomUUID } from 'expo-crypto'
 import { useForm, Controller } from 'react-hook-form'
-import { Picker } from '@react-native-picker/picker'
+
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Picker } from '@react-native-picker/picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
-const taskSchema = z.object({
-  title: z.string({ required_error: 'Task title is required' }),
-  description: z.string().optional(),
-  dueDate: z.date({ required_error: 'Due date is required' }),
-  status: z.enum(['pending', 'in-progress', 'completed'], {
-    required_error: 'Status is required',
-  }),
-})
+import { Task, TaskForm, taskFormSchema } from '@app/types/task.types'
+import { storeData } from '@app/state/async.state'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+const QUERYKEY = 'tasks'
 
 export default function NewTaskPage() {
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date>()
+  const queryClient = useQueryClient()
 
   const handleDateChange = (event: any, date?: Date) => {
     setShowDatePicker(false)
     if (date) setSelectedDate(date)
   }
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(taskSchema),
+  const { control, handleSubmit } = useForm<TaskForm>({
+    resolver: zodResolver(taskFormSchema),
   })
 
   const router = useRouter()
+  const mutation = useMutation({
+    mutationFn: async (data: TaskForm) => {
+      const newTask = {
+        ...data,
+        id: randomUUID(),
+      }
 
-  const onSubmit = (data: any) => {
-    console.log(data)
-    router.push('/tasks')
+      const existingTasks = queryClient.getQueryData<Task[]>([QUERYKEY]) || []
+      const updatedTasks = [...existingTasks, newTask]
+      await storeData(QUERYKEY, updatedTasks)
+      return updatedTasks
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERYKEY] })
+      router.push('/tasks')
+    },
+    onError: (error) => {
+      console.error('Error saving task:', error)
+    },
+  })
+
+  const onSubmit = (data: TaskForm) => {
+    mutation.mutate(data)
   }
 
   return (
@@ -55,22 +69,25 @@ export default function NewTaskPage() {
         <Controller
           control={control}
           name="title"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={[styles.input, errors.title && styles.errorInput]}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Enter task title"
-              placeholderTextColor="#999"
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                style={[styles.input, error && styles.errorInput]}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Enter task title"
+                placeholderTextColor="#999"
+              />
+              {error && (
+                <Text style={styles.errorText}>{error?.message as string}</Text>
+              )}
+            </>
           )}
         />
-        {errors.title && (
-          <Text style={styles.errorText}>
-            {errors.title?.message as string}
-          </Text>
-        )}
       </View>
 
       <View style={styles.inputContainer}>
@@ -78,17 +95,25 @@ export default function NewTaskPage() {
         <Controller
           control={control}
           name="description"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Enter task description"
-              placeholderTextColor="#999"
-              multiline
-              numberOfLines={3}
-            />
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Enter task description"
+                placeholderTextColor="#999"
+                multiline
+                numberOfLines={3}
+              />
+              {error && (
+                <Text style={styles.errorText}>{error?.message as string}</Text>
+              )}
+            </>
           )}
         />
       </View>
@@ -98,7 +123,7 @@ export default function NewTaskPage() {
         <Controller
           control={control}
           name="dueDate"
-          render={({ field: { onChange } }) => (
+          render={({ field: { onChange }, fieldState: { error } }) => (
             <>
               <TouchableOpacity
                 style={styles.dateButton}
@@ -119,14 +144,12 @@ export default function NewTaskPage() {
                   }}
                 />
               )}
+              {error && (
+                <Text style={styles.errorText}>{error?.message as string}</Text>
+              )}
             </>
           )}
         />
-        {errors.DueDate && (
-          <Text style={styles.errorText}>
-            {errors.DueDate?.message as string}
-          </Text>
-        )}
       </View>
 
       <View style={styles.inputContainer}>
@@ -134,23 +157,23 @@ export default function NewTaskPage() {
         <Controller
           control={control}
           name="status"
-          render={({ field: { onChange, value } }) => (
-            <Picker
-              selectedValue={value}
-              onValueChange={onChange}
-              style={styles.input}
-            >
-              <Picker.Item label="Pending" value="pending" />
-              <Picker.Item label="In Progress" value="in-progress" />
-              <Picker.Item label="Completed" value="completed" />
-            </Picker>
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <>
+              <Picker
+                selectedValue={value}
+                onValueChange={onChange}
+                style={styles.input}
+              >
+                <Picker.Item label="Pending" value="pending" />
+                <Picker.Item label="In Progress" value="in-progress" />
+                <Picker.Item label="Completed" value="completed" />
+              </Picker>
+              {error && (
+                <Text style={styles.errorText}>{error?.message as string}</Text>
+              )}
+            </>
           )}
         />
-        {errors.status && (
-          <Text style={styles.errorText}>
-            {errors.status?.message as string}
-          </Text>
-        )}
       </View>
 
       <TouchableOpacity

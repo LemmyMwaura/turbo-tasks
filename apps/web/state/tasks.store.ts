@@ -18,7 +18,7 @@ export interface TaskStore {
 
 export const createTaskStore = () => {
   return createStore<TaskStore>()(
-    persist(
+    
       (set, get) => ({
         ...initTaskState,
         addTask: (task: Task) => {
@@ -47,11 +47,11 @@ export const createTaskStore = () => {
           console.log('Getting task by id:', id, task)
           return task
         },
-      }),
-      {
-        name: `${PREFIX}-tasks`,
-        storage: createJSONStorage(() => localStorage),
       }
+      // {
+      //   name: `${PREFIX}-tasks`,
+      //   storage: createJSONStorage(() => localStorage),
+      // }
     )
   )
 }

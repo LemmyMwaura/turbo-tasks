@@ -21,6 +21,7 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   const handleUpdateTask = (data: Task) => {
     if (task) {
       updateTask(taskId, data)
+      setEditModalVisible(false)
       router.refresh()
     }
   }

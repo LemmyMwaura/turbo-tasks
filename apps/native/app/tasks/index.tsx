@@ -12,16 +12,11 @@ import { StatusBar } from 'expo-status-bar'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { DEMOTASKS } from '@app/utils/seed.tasks'
 
-type Task = {
-  id: number
-  description: string
-  title: string
-  isCompleted: boolean
-}
+import { Task } from '@app/types/task.types'
 
 export default function TasksPage() {
   const [tasks, setTask] = useState<Task[]>(DEMOTASKS)
-  const router = useRouter() // For navigation
+  const router = useRouter()
 
   const onItemPressed = (task: Task) => {
     // newTasks[index] = { ...task, isCompleted: !task.isCompleted }
@@ -39,10 +34,10 @@ export default function TasksPage() {
         options={{
           title: 'TASK TRACKER',
           headerShadowVisible: false,
-          headerTitleAlign: "center",
+          headerTitleAlign: 'center',
           headerStyle: {
-            backgroundColor: "rgba(245, 224, 220, 0.8)"
-          }
+            backgroundColor: 'rgba(245, 224, 220, 0.8)',
+          },
         }}
       />
 
@@ -56,7 +51,9 @@ export default function TasksPage() {
           >
             <Text style={styles.taskTitle}>{item.title}</Text>
             <Text style={styles.taskDesc}>
-              {item.description.substring(0, 100) + '...'}
+              {item.description
+                ? item.description.substring(0, 100) + '...'
+                : ''}
             </Text>
           </Pressable>
         )}

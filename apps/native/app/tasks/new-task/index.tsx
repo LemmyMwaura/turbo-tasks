@@ -1,36 +1,50 @@
-import React, { useState } from 'react';
+import { z } from 'zod'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'expo-router';
+} from 'react-native'
+import { useRouter } from 'expo-router'
+import { useForm, Controller } from 'react-hook-form'
+import { Picker } from '@react-native-picker/picker'
+import { zodResolver } from '@hookform/resolvers/zod'
+import DateTimePicker from '@react-native-community/datetimepicker'
+
+const taskSchema = z.object({
+  title: z.string({ required_error: 'Task title is required' }),
+  description: z.string().optional(),
+  dueDate: z.date({ required_error: 'Due date is required' }),
+  status: z.enum(['pending', 'in-progress', 'completed'], {
+    required_error: 'Status is required',
+  }),
+})
 
 export default function NewTaskPage() {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<Date>()
 
   const handleDateChange = (event: any, date?: Date) => {
-    setShowDatePicker(false);
-    if (date) setSelectedDate(date);
-  };
+    setShowDatePicker(false)
+    if (date) setSelectedDate(date)
+  }
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const router = useRouter();
+  } = useForm({
+    resolver: zodResolver(taskSchema),
+  })
+
+  const router = useRouter()
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    router.push('/tasks');
-  };
+    console.log(data)
+    router.push('/tasks')
+  }
 
   return (
     <View style={styles.container}>
@@ -41,7 +55,6 @@ export default function NewTaskPage() {
         <Controller
           control={control}
           name="title"
-          rules={{ required: 'Task title is required' }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={[styles.input, errors.title && styles.errorInput]}
@@ -54,7 +67,9 @@ export default function NewTaskPage() {
           )}
         />
         {errors.title && (
-          <Text style={styles.errorText}>{errors.title?.message as string}</Text>
+          <Text style={styles.errorText}>
+            {errors.title?.message as string}
+          </Text>
         )}
       </View>
 
@@ -82,7 +97,7 @@ export default function NewTaskPage() {
         <Text style={styles.label}>Due Date</Text>
         <Controller
           control={control}
-          name="DueDate"
+          name="dueDate"
           render={({ field: { onChange } }) => (
             <>
               <TouchableOpacity
@@ -95,18 +110,23 @@ export default function NewTaskPage() {
               </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
-                  value={selectedDate}
+                  value={selectedDate ?? new Date()}
                   mode="date"
                   display="default"
                   onChange={(e, date) => {
-                    handleDateChange(e, date);
-                    onChange(date);
+                    handleDateChange(e, date)
+                    onChange(date)
                   }}
                 />
               )}
             </>
           )}
         />
+        {errors.DueDate && (
+          <Text style={styles.errorText}>
+            {errors.DueDate?.message as string}
+          </Text>
+        )}
       </View>
 
       <View style={styles.inputContainer}>
@@ -126,6 +146,11 @@ export default function NewTaskPage() {
             </Picker>
           )}
         />
+        {errors.status && (
+          <Text style={styles.errorText}>
+            {errors.status?.message as string}
+          </Text>
+        )}
       </View>
 
       <TouchableOpacity
@@ -135,7 +160,7 @@ export default function NewTaskPage() {
         <Text style={styles.submitButtonText}>Add Task</Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -186,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   submitButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#89b4fa',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
@@ -197,4 +222,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-});
+})

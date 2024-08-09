@@ -1,12 +1,11 @@
 import { Text, StyleSheet, View, ScrollView } from 'react-native'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
+import { Stack, useLocalSearchParams } from 'expo-router'
 
 import { DEMOTASKS } from '@app/utils/seed.tasks'
 
 export default function TaskDetailsPage() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>()
-  const task = DEMOTASKS.find((task) => task.id === parseInt(taskId))
-  const router = useRouter()
+  const task = DEMOTASKS.find((task) => task.id === taskId)
 
   if (!task) {
     return (
@@ -24,7 +23,7 @@ export default function TaskDetailsPage() {
           headerTintColor: '#fff',
           headerTitleStyle: {
             fontWeight: 'bold',
-          }
+          },
         }}
       />
 
@@ -34,14 +33,18 @@ export default function TaskDetailsPage() {
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Status:</Text>
-          <Text style={task.isCompleted ? styles.completed : styles.pending}>
-            {task.isCompleted ? 'Completed' : 'Pending'}
+          <Text
+            style={
+              task.status === 'completed' ? styles.completed : styles.pending
+            }
+          >
+            {task.status}
           </Text>
         </View>
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Due Date:</Text>
-          <Text style={styles.value}>{task.dueDate}</Text>
+          <Text style={styles.value}>{task.dueDate.toISOString()}</Text>
         </View>
       </View>
     </ScrollView>
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
   },
   completed: {
     fontSize: 16,
-    color: '#4CAF50',
+    color: '#89b4fa',
   },
   pending: {
     fontSize: 16,

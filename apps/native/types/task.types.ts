@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const taskSchema = z
   .object({
-    id: z.string(),
+    id: z.string().optional(),
     title: z
       .string({ required_error: 'Task title is required' })
       .min(5, 'Task title is too short'),
@@ -14,7 +14,4 @@ export const taskSchema = z
   })
   .strict()
 
-export const taskFormSchema = taskSchema.omit({ id: true })
-
-export type TaskForm = z.infer<typeof taskFormSchema>
 export type Task = z.infer<typeof taskSchema>

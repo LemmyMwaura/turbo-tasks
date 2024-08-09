@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { storeData } from '../state/local.store'
+import { storeData } from '@app/app/state/local.store'
 import { Task } from '@repo/ui'
 
 const QUERYKEY = 'tasks'

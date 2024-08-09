@@ -17,12 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <ReactQueryClientProvider>
-        <html lang="en">
-          <body className={inter.className}>{children}</body>
-        </html>
-      </ReactQueryClientProvider>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en" className="min-[110vh]:">
+        <body className={inter.className}>
+          <div className="bg-[#f5e0dc]">{children}</div>
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   )
 }

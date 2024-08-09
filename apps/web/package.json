@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@repo/ui": "*",
     "@tanstack/react-query": "^5.51.23",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.19.10",
+    "tailwind-merge": "^2.4.0",
+    "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -22,9 +27,12 @@
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.20",
     "babel-plugin-react-native-web": "^0.19.10",
     "eslint": "^8.56.0",
     "eslint-config-next": "14.0.4",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.9",
     "typescript": "^5.3.3"
   }
 }

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { getData } from '../state/local.store'
+import { getData } from '@app/app/state/local.store'
+
 import { Task } from '@repo/ui'
 
 const QUERYKEY = 'tasks'

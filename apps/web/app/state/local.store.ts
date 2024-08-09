@@ -1,3 +1,5 @@
+import { DEMOTASKS } from "@repo/ui"
+
 const PREFIX = 'TASK_TRACKER'
 
 /** Store Data to LocalStorage */
@@ -17,4 +19,8 @@ export const getData = async (key: string) => {
   } catch (e) {
     console.error(e)
   }
+}
+
+export const seedData = () => {
+  storeData('tasks', DEMOTASKS)
 }

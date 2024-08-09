@@ -1,21 +1,16 @@
 import { Task } from '@repo/ui'
+
+import TaskItem from './TaskItem'
+
 interface TaskListProps {
   tasks: Task[]
 }
 
 const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   return (
-    <div className="task-list">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-3 w-full">
       {tasks.map((task) => (
-        <div key={task.id} className="task-item">
-          <h3 className="task-title">{task.title}</h3>
-          <p className="task-description">{task.description}</p>
-          <span
-            className={`task-status task-status-${task.status.toLowerCase()}`}
-          >
-            {task.status}
-          </span>
-        </div>
+        <TaskItem key={task.id} task={task} />
       ))}
     </div>
   )

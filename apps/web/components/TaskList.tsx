@@ -1,5 +1,6 @@
-import { Task } from '@repo/ui'
+'use client'
 
+import { Task } from '@repo/ui'
 import TaskItem from './TaskItem'
 
 interface TaskListProps {

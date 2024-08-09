@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ReactQueryClientProvider } from '@app/components/ReactQueryProvider'
 
 import '../styles/global.css'
+import { TaskStoreProvider } from '../providers/task.store'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,12 +17,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ReactQueryClientProvider>
-      <html lang="en" className="min-[110vh]:">
-        <body className={inter.className}>
+    <html lang="en" className="min-[110vh]:">
+      <body className={inter.className}>
+        <TaskStoreProvider>
           <div className="bg-[#f5e0dc]">{children}</div>
-        </body>
-      </html>
-    </ReactQueryClientProvider>
+        </TaskStoreProvider>
+      </body>
+    </html>
   )
 }

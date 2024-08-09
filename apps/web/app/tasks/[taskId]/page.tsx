@@ -2,44 +2,33 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useQueryClient } from '@tanstack/react-query'
+
+import { TaskForm } from '@app/components/TaskForm'
+import { useTaskStore } from '@app/providers/task.store'
 
 import { Task } from '@repo/ui'
-import { TaskForm } from '@app/components/TaskForm'
-
-import { useUpdateTaskMutation } from '@app/hooks/useUpdateMutation'
-import { useDeleteMutation } from '@app/hooks/useDeleteMutation'
 
 const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
-  const queryClient = useQueryClient()
   const router = useRouter()
+  const { getTaskById, updateTask, removeTask } = useTaskStore((store) => store)
 
   const taskId = params.taskId
-  const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
-  const task = existingTasks.find((task) => task.id === taskId)
+  const task = getTaskById(taskId)
 
   const [editModalVisible, setEditModalVisible] = useState(false)
   const [delModalVisible, setDelModalVisible] = useState(false)
 
-  const editMutation = useUpdateTaskMutation({
-    onComplete: () => setEditModalVisible(false),
-  })
-
-  const delMutation = useDeleteMutation({
-    onComplete: () => {
-      router.push('/tasks')
-    },
-  })
-
   const handleUpdateTask = (data: Task) => {
     if (task) {
-      editMutation.mutate({ ...task, ...data })
+      updateTask(taskId, data)
+      router.refresh()
     }
   }
 
   const handleDelete = () => {
     if (task?.id) {
-      delMutation.mutate(task.id)
+      removeTask(taskId)
+      router.push('/tasks')
     }
   }
 

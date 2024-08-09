@@ -3,8 +3,10 @@
 import TaskList from '@app/components/TaskList'
 import { useTaskStore } from '@app/providers/task.store'
 
-export default function TaskPage() {
+export const TaskPageComponent = () => {
   const tasks = useTaskStore((store) => store.tasks)
+
+  console.log('Current tasks:', tasks)
 
   return (
     <div>

@@ -5,6 +5,9 @@ const initTaskState = {
   tasks: DEMOTASKS,
 }
 
+// Note: We experienced intermittent issues with Zustand state persistence using local storage during hydration. As a result, we are temporarily avoiding local storage for state management.
+// TODO@LemmyMwaura: downgrade to safer nextjs version
+
 export interface TaskStore {
   tasks: Task[]
   addTask: (task: Task) => void

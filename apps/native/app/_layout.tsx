@@ -3,10 +3,15 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native'
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { useColorScheme } from '@repo/ui'
+
+export function ErrorBoundary() {
+  const router = useRouter()
+  return router.push("/tasks")
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()

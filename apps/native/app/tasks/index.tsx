@@ -14,8 +14,9 @@ import { useQuery } from '@tanstack/react-query'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
  
-import { getData } from '@app/state/async.state'
+import { getData, storeData } from '@app/state/async.state'
 import { Task } from '@app/types/task.types'
+import { DEMOTASKS } from '@app/utils/seed.tasks'
 
 const QUERYKEY = 'tasks'
 
@@ -25,6 +26,9 @@ export default function TasksPage() {
     queryKey: [QUERYKEY],
     queryFn: () => getData(QUERYKEY),
   })
+
+  // uncomment to seed your local store
+  // storeData("tasks", DEMOTASKS)
 
   const onItemPressed = (task: Task) => {
     router.push(`/tasks/${task.id}`)

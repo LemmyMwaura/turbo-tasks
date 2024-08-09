@@ -7,21 +7,24 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import Modal from 'react-native-modal'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 
 import { Task } from '@app/types/task.types'
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
 import { storeData } from '@app/state/async.state'
+import { DeleteConfirmationModal } from '@app/components/DeleteFormModal'
 
 export default function TaskDetailsPage() {
   const queryClient = useQueryClient()
+  const router = useRouter()
   const { taskId } = useLocalSearchParams<{ taskId: string }>()
 
   const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
   const task = existingTasks.find((task) => task.id === taskId)
 
   const [modalVisible, setModalVisible] = useState(false)
+  const [delModalVisible, setDelModalVisible] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     task?.dueDate ? new Date(task.dueDate) : undefined
   )
@@ -36,20 +39,45 @@ export default function TaskDetailsPage() {
     return updatedTasks
   }
 
-  const mutation = useMutation({
+  const deleteTask = async (taskId: string) => {
+    const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
+    const updatedTasks = existingTasks.filter((task) => task.id !== taskId)
+    return updatedTasks
+  }
+
+  const editMutation = useMutation({
     mutationFn: (updatedTask: Task) => updateTask(updatedTask),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] })
       setModalVisible(false)
     },
+    onError: (error) => {
+      console.error('Something went wrong:', error)
+    },
+  })
+
+  const delMutation = useMutation({
+    mutationFn: (taskId: string) => deleteTask(taskId),
+    onSuccess: async (updatedTasks) => {
+      await storeData('tasks', updatedTasks)
+      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+      router.push('/tasks')
+    },
+    onError: (error) => {
+      console.error('Something went wrong:', error)
+    },
   })
 
   const handleUpdateTask = (data: Task) => {
     if (task) {
-      mutation.mutate({ ...task, ...data })
+      editMutation.mutate({ ...task, ...data })
     }
+  }
 
-    setModalVisible(false)
+  const handleDelete = () => {
+    if (task && task.id) {
+      delMutation.mutate(task.id)
+    }
   }
 
   if (!task) {
@@ -103,12 +131,27 @@ export default function TaskDetailsPage() {
           </Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.editButtonText}>Edit Task</Text>
-        </TouchableOpacity>
+        <View style={styles.btns}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.ButtonText}>Edit Task</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => setDelModalVisible(true)}
+          >
+            <Text style={styles.ButtonText}>Delete Task</Text>
+          </TouchableOpacity>
+        </View>
+
+        <DeleteConfirmationModal
+          isVisible={delModalVisible}
+          onCancel={() => setDelModalVisible(false)}
+          onConfirm={handleDelete}
+        />
 
         <Modal
           isVisible={modalVisible}
@@ -190,6 +233,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 50,
   },
+  btns: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
   editButton: {
     backgroundColor: '#89b4fa',
     padding: 10,
@@ -197,7 +246,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  editButtonText: {
+  deleteButton: {
+    backgroundColor: '#F44336',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  ButtonText: {
     color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
@@ -211,7 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 20,
     width: '90%',
-    maxWidth: 500, // Max width for larger screens
+    maxWidth: 500,
   },
   closeButton: {
     alignSelf: 'flex-end',

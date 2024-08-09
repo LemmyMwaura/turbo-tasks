@@ -8,12 +8,13 @@ import {
 } from 'react-native'
 import Modal from 'react-native-modal'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { useQueryClient, useMutation } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { Task } from '@app/types/task.types'
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
-import { storeData } from '@app/state/async.state'
 import { DeleteConfirmationModal } from '@app/components/DeleteFormModal'
+import { useUpdateTaskMutation } from '@app/hooks/useUpdateMutation'
+import { useDeleteMutation } from '@app/hooks/useDeleteMutation'
 
 export default function TaskDetailsPage() {
   const queryClient = useQueryClient()
@@ -30,41 +31,13 @@ export default function TaskDetailsPage() {
   )
   const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const updateTask = async (updatedTask: Task) => {
-    const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
-    const updatedTasks = existingTasks.map((task) =>
-      task.id === updatedTask.id ? { ...task, ...updatedTask } : task
-    )
-    await storeData('tasks', updatedTasks)
-    return updatedTasks
-  }
-
-  const deleteTask = async (taskId: string) => {
-    const existingTasks = queryClient.getQueryData<Task[]>(['tasks']) || []
-    const updatedTasks = existingTasks.filter((task) => task.id !== taskId)
-    return updatedTasks
-  }
-
-  const editMutation = useMutation({
-    mutationFn: (updatedTask: Task) => updateTask(updatedTask),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-      setModalVisible(false)
-    },
-    onError: (error) => {
-      console.error('Something went wrong:', error)
-    },
+  const editMutation = useUpdateTaskMutation({
+    onComplete: () => setModalVisible(false),
   })
 
-  const delMutation = useMutation({
-    mutationFn: (taskId: string) => deleteTask(taskId),
-    onSuccess: async (updatedTasks) => {
-      await storeData('tasks', updatedTasks)
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
+  const delMutation = useDeleteMutation({
+    onComplete: () => {
       router.push('/tasks')
-    },
-    onError: (error) => {
-      console.error('Something went wrong:', error)
     },
   })
 

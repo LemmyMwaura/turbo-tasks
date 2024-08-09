@@ -10,25 +10,22 @@ import {
 } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { useQuery } from '@tanstack/react-query'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
- 
-import { getData, storeData } from '@app/state/async.state'
+
 import { Task } from '@app/types/task.types'
+import { useGetTasks } from '@app/hooks/useFetchHooks'
+import { storeData } from '@app/state/async.state'
 import { DEMOTASKS } from '@app/utils/seed.tasks'
 
 const QUERYKEY = 'tasks'
 
 export default function TasksPage() {
   const router = useRouter()
-  const { data: tasks, error, isLoading } = useQuery({
-    queryKey: [QUERYKEY],
-    queryFn: () => getData(QUERYKEY),
-  })
+  const { data: tasks, error, isLoading } = useGetTasks()
 
   // uncomment to seed your local store
-  // storeData("tasks", DEMOTASKS)
+  // storeData(QUERYKEY, DEMOTASKS)
 
   const onItemPressed = (task: Task) => {
     router.push(`/tasks/${task.id}`)
@@ -129,7 +126,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   taskTitle: {
-    fontFamily: 'Inter',
+    // fontFamily: 'Inter',
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',

@@ -17,10 +17,9 @@ export const useDeleteMutation = ({ onComplete }: Props) => {
     mutationFn: async (taskId: string) => {
       const existingTasks = queryClient.getQueryData<Task[]>([QUERYKEY]) || []
       const updatedTasks = existingTasks.filter((task) => task.id !== taskId)
-      return updatedTasks
-    },
-    onSuccess: async (updatedTasks) => {
       await storeData(QUERYKEY, updatedTasks)
+    },
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: [QUERYKEY] })
       onComplete()
     },

@@ -1,32 +1,74 @@
-# Turborepo react-native starter
+## What's Inside?
 
-This is an official starter Turborepo.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest -e with-react-native-web
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
+This Turborepo includes the following apps and packages:
 
 ### Apps and Packages
 
-- `native`: a [react-native](https://reactnative.dev/) app built with [expo](https://docs.expo.dev/)
-- `web`: a [Next.js](https://nextjs.org/) app built with [react-native-web](https://necolas.github.io/react-native-web/)
-- `@repo/ui`: a stub [react-native](https://reactnative.dev/) component library shared by both `web` and `native` applications
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **`native`**: A [React Native](https://reactnative.dev/) app built with [Expo](https://docs.expo.dev/).
+- **`web`**: A [Next.js](https://nextjs.org/) app integrated with [React Native Web](https://necolas.github.io/react-native-web/).
+- **`@repo/ui`**: A shared [React Native](https://reactnative.dev/) component library used by both `web` and `native` apps.
+- **`@repo/typescript-config`**: Shared `tsconfig.json` settings for TypeScript across the monorepo.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+All apps and packages are fully written in [TypeScript](https://www.typescriptlang.org/).
 
 ### Utilities
 
-This Turborepo has some additional tools already setup for you:
+This Turborepo comes with additional tools pre-configured for you:
 
-- [Expo](https://docs.expo.dev/) for native development
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Prettier](https://prettier.io) for code formatting
+### Getting Started
+
+1. **Install Dependencies:**
+
+   Ensure you have Node.js and Yarn (v1.22.19) installed. Then, install the dependencies:
+
+   ```sh
+   yarn
+   ```
+
+2. **Development:**
+
+   Start the development server:
+
+   ```sh
+   yarn run dev
+   ```
+
+3. **Build:**
+
+   Build the project:
+
+   ```sh
+   yarn run build
+   ```
+
+4. **Connect Your Device or Emulator:**
+
+   To run the app on a physical Android/iOS device, install the Expo Go app from the Google Play Store or App Store, then scan the QR code that appears in your terminal. You can also run the app on an Android/iOS emulator.
+
+### Folder Structure
+
+The monorepo is organized into two main workspaces: `apps` and `packages`.
+
+```bash
+turbo-tasks
+├── apps
+│   ├── native
+│   └── web
+└── packages
+    ├── ui
+    └── typescript-config
+```
+
+### Technologies Used
+
+- **[Expo](https://docs.expo.dev/):** For native development.
+- **[Next.js](https://nextjs.org/):** For web development.
+- **[React Native](https://reactnative.dev/):** For building native mobile apps.
+- **[React Native Web](https://necolas.github.io/react-native-web/):** For running React Native components on the web.
+- **[TypeScript](https://www.typescriptlang.org/):** For static type checking.
+- **[Prettier](https://prettier.io):** For code formatting.
+- **[Turborepo](https://turborepo.dev/):** For managing the monorepo build system.
+
+---
+
+This version is more concise, organized, and clear, making it easier to follow and understand. Let me know if there's anything else you'd like to modify!

@@ -7,7 +7,7 @@ import { TaskForm } from '@app/components/TaskForm'
 import { useTaskStore } from '@app/providers/task.store'
 
 import { Task } from '@app/types/task.types'
-import { v4 as uuid } from 'uuid';
+import { uuid } from 'uuidv4';
 
 export default function NewTaskPage() {
   const { addTask } = useTaskStore((store) => store)

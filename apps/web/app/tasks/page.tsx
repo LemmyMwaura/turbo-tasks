@@ -7,7 +7,7 @@ import { useTaskStore } from '@app/providers/task.store'
 
 export default function TaskPage() {
   const router = useRouter()
-  const tasks = useTaskStore((store) => store.tasks)
+  const { tasks } = useTaskStore((store) => store)
 
   const handleAddTask = () => {
     router.push('/tasks/new-task')

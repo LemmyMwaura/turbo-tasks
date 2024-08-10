@@ -69,6 +69,7 @@ turbo-tasks
 - **[Prettier](https://prettier.io):** For code formatting.
 - **[Turborepo](https://turborepo.dev/):** For managing the monorepo build system.
 
----
+### TODO
 
-This version is more concise, organized, and clear, making it easier to follow and understand. Let me know if there's anything else you'd like to modify!
+- Add a more robust backend to leverage server components for improved performance.
+- Move btns and shared elements to a separate elements package.

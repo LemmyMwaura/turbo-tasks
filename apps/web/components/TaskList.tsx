@@ -1,6 +1,6 @@
 'use client'
 
-import { Task } from '@repo/ui'
+import { Task } from '@app/types/task.types'
 import TaskItem from './TaskItem'
 
 type Props = {

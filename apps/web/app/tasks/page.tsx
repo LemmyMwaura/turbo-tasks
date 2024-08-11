@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { TaskList } from '@app/components/TaskList'
 import { useTaskStore } from '@app/providers/task.store'
 
+import { Button } from '@app/ui/Button'
+
 export default function TaskPage() {
   const router = useRouter()
   const { tasks } = useTaskStore((store) => store)
@@ -15,16 +17,13 @@ export default function TaskPage() {
 
   return (
     <div>
-      <div className="flex p-2 items-center w-full">
-        <h4 className="m-auto font-bold text-2xl">Tasks</h4>
-        <button
-          onClick={handleAddTask}
-          className="ml-auto bg-blue-500 text-white py-2 px-4 rounded-md font-semibold"
-        >
-          Add New Task
-        </button>
+      <div className=" mx-auto px-4 py-8 md:px-6 md:py-12">
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h1 className="text-2xl font-bold md:text-3xl">Tasks</h1>
+          <Button className='bg-black text-white' onClick={handleAddTask} variant="secondary">Add New Task</Button>
+        </div>
+        {tasks && <TaskList tasks={tasks} />}
       </div>
-      {tasks && <TaskList tasks={tasks} />}
     </div>
   )
 }

@@ -15,7 +15,7 @@ import { Task } from '@app/types/task.types'
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
 import { DeleteConfirmationModal } from '@app/components/DeleteFormModal'
 import { TakeMeHome } from '@app/components/TakeMeHome'
-import { formatDueDate } from '@app/utils/date-util'
+import { formatDate } from '@app/utils/date-util'
 
 export default function TaskDetailsPage() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>()
@@ -86,7 +86,7 @@ export default function TaskDetailsPage() {
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Due Date:</Text>
           <Text style={styles.value}>
-            {selectedTask.dueDate ? formatDueDate(selectedTask.dueDate) : ''}
+            {selectedTask.dueDate ? formatDate(selectedTask.dueDate) : ''}
           </Text>
         </View>
 

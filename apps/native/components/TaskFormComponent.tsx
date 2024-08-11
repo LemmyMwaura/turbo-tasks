@@ -16,7 +16,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker'
 
 import { Task, taskSchema } from '@app/types/task.types'
-import { formatDueDate } from '@app/utils/date-util'
+import { formatDate } from '@app/utils/date-util'
 
 interface Props {
   task?: Task
@@ -116,7 +116,7 @@ export const TaskFormComponent: React.FC<Props> = ({ task, onSubmit }) => {
                 onPress={() => setShowDatePicker(true)}
               >
                 <Text style={styles.dateButtonText}>
-                  {dueDate ? formatDueDate(dueDate) : 'Select Date'}
+                  {dueDate ? formatDate(dueDate) : 'Select Date'}
                 </Text>
               </TouchableOpacity>
               {showDatePicker && (

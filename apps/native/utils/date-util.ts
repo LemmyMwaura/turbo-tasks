@@ -1,11 +1,11 @@
-export const formatDate = (input?: string | number): string => {
-  if (!input) return ''
+export const formatDate = (date: Date) => {
+  if (!date) return ''
 
-  const date = new Date(input).toLocaleDateString('en-GB', {
+  const formattedDate = new Date(date).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   })
 
-  return date
+  return formattedDate.replace(/\b(\d{1,2})\b/, (day) => `${day}`)
 }

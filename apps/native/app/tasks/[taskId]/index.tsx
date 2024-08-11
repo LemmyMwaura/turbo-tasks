@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Text,
   StyleSheet,
@@ -9,47 +9,48 @@ import {
 import Modal from 'react-native-modal'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 
+import { useTaskStore } from '@app/state/tasks.store'
 import { Task } from '@app/types/task.types'
+
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
 import { DeleteConfirmationModal } from '@app/components/DeleteFormModal'
-import { useTaskStore } from '@app/state/tasks.store'
+import { TakeMeHome } from '@app/components/TakeMeHome'
+import { formatDueDate } from '@app/utils/formatDate'
 
 export default function TaskDetailsPage() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>()
 
-  const { tasks, updateTask, removeTask } = useTaskStore((store) => store)
-  const task = tasks.find((task) => task.id === taskId)
-
-  const [modalVisible, setModalVisible] = useState(false)
-  const [delModalVisible, setDelModalVisible] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    task?.dueDate ? new Date(task.dueDate) : undefined
+  const { tasks, updateTask, removeTask, getTaskByID } = useTaskStore(
+    (store) => store
   )
 
-  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [selectedTask, setTask] = useState<Task>()
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showDelModal, setShowDelModal] = useState(false)
+
+  useEffect(() => {
+    const foundTask = getTaskByID(taskId)
+    if (foundTask) setTask(foundTask)
+  }, [taskId, tasks])
 
   const handleUpdateTask = (data: Task) => {
     if (data) {
       data.id = taskId
-      updateTask(data)
-      setModalVisible(false)
-      router.replace(`/tasks/${taskId}`)
+      const task = updateTask(data)
+      setTask(task)
+      setShowEditModal(false)
     }
   }
 
   const handleDelete = () => {
-    if (task && task.id) {
+    if (selectedTask && selectedTask.id) {
       removeTask(taskId)
       router.replace('/tasks')
     }
   }
 
-  if (!task) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Task not found</Text>
-      </View>
-    )
+  if (!selectedTask) {
+    return <TakeMeHome />
   }
 
   return (
@@ -66,75 +67,65 @@ export default function TaskDetailsPage() {
       />
 
       <View style={styles.card}>
-        <Text style={styles.title}>{task.title}</Text>
-        <Text style={styles.description}>{task.description}</Text>
+        <Text style={styles.title}>{selectedTask.title}</Text>
+        <Text style={styles.description}>{selectedTask.description}</Text>
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Status:</Text>
           <Text
             style={
-              task.status === 'completed' ? styles.completed : styles.pending
+              selectedTask.status === 'completed'
+                ? styles.completed
+                : styles.pending
             }
           >
-            {task.status}
+            {selectedTask.status}
           </Text>
         </View>
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Due Date:</Text>
           <Text style={styles.value}>
-            {task?.dueDate
-              ? new Date(task.dueDate)
-                  .toLocaleDateString('en-GB', {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                  })
-                  .replace(/(\d{1,2})(st|nd|rd|th)?/, (day) => `${day}th`)
-              : ''}
+            {selectedTask.dueDate ? formatDueDate(selectedTask.dueDate) : ''}
           </Text>
         </View>
 
         <View style={styles.btns}>
           <TouchableOpacity
             style={styles.editButton}
-            onPress={() => setModalVisible(true)}
+            onPress={() => setShowEditModal(true)}
           >
             <Text style={styles.ButtonText}>Edit Task</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.deleteButton}
-            onPress={() => setDelModalVisible(true)}
+            onPress={() => setShowDelModal(true)}
           >
             <Text style={styles.ButtonText}>Delete Task</Text>
           </TouchableOpacity>
         </View>
 
         <DeleteConfirmationModal
-          isVisible={delModalVisible}
-          onCancel={() => setDelModalVisible(false)}
+          isVisible={showDelModal}
+          onCancel={() => setShowDelModal(false)}
           onConfirm={handleDelete}
         />
 
         <Modal
-          isVisible={modalVisible}
-          onBackdropPress={() => setModalVisible(false)}
+          isVisible={showEditModal}
+          onBackdropPress={() => setShowEditModal(false)}
           style={styles.modal}
         >
           <View style={styles.modalContent}>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
+              onPress={() => setShowEditModal(false)}
             >
               <Text style={styles.closeButtonText}>Close</Text>
             </TouchableOpacity>
             <TaskFormComponent
-              task={task}
-              selectedDate={selectedDate}
-              showDatePicker={showDatePicker}
-              setShowDatePicker={setShowDatePicker}
-              setSelectedDate={setSelectedDate}
+              task={selectedTask}
               onSubmit={(data) => {
                 handleUpdateTask(data)
               }}

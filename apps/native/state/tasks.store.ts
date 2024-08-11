@@ -11,13 +11,14 @@ interface TaskState {
   tasks: Task[]
   addTask: (task: Task) => void
   removeTask: (taskId: string) => void
-  updateTask: (updatedTask: Task) => void
+  updateTask: (updatedTask: Task) => Task
+  getTaskByID: (taskId: string) => Task | undefined
 }
 
 export const useTaskStore = create<TaskState>()(
   persist(
-    (set) => ({
-      tasks: DEMOTASKS,
+    (set, get) => ({
+      tasks: [], // replace [] with Demotasks to seed initial data.
       addTask: (task) =>
         set((state) => ({
           tasks: [...state.tasks, task],
@@ -26,12 +27,20 @@ export const useTaskStore = create<TaskState>()(
         set((state) => ({
           tasks: state.tasks.filter((task) => task.id !== taskId),
         })),
-      updateTask: (updatedTask) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
+      updateTask: (updatedTask) => {
+        set((state) => {
+          const updatedTasks = state.tasks.map((task) =>
             task.id === updatedTask.id ? updatedTask : task
-          ),
-        })),
+          )
+          return { tasks: updatedTasks }
+        })
+
+        return updatedTask
+      },
+      getTaskByID: (taskID) => {
+        const { tasks } = get()
+        return tasks.find((task) => task.id === taskID)
+      },
     }),
     {
       name: `${PREFIX}-tasks`,

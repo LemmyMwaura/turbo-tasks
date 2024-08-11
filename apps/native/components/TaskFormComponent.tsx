@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Controller, useForm } from 'react-hook-form'
 import { Picker } from '@react-native-picker/picker'
@@ -15,26 +16,16 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker'
 
 import { Task, taskSchema } from '@app/types/task.types'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { formatDueDate } from '@app/utils/formatDate'
 
 interface Props {
   task?: Task
-  selectedDate: Date | undefined
-  showDatePicker: boolean
-  setShowDatePicker: (show: boolean) => void
-  setSelectedDate: (date?: Date) => void
   onSubmit: (data: Task) => void
 }
 
-export const TaskFormComponent: React.FC<Props> = ({
-  task,
-  selectedDate,
-  showDatePicker,
-  setShowDatePicker,
-  setSelectedDate,
-  onSubmit,
-}) => {
-  const { control, handleSubmit, setValue } = useForm<Task>({
+export const TaskFormComponent: React.FC<Props> = ({ task, onSubmit }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  const { control, handleSubmit, setValue, watch } = useForm<Task>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
       title: task?.title || '',
@@ -44,10 +35,11 @@ export const TaskFormComponent: React.FC<Props> = ({
     },
   })
 
+  const dueDate = watch('dueDate')
+
   const handleDateChange = (_event: DateTimePickerEvent, date?: Date) => {
     setShowDatePicker(false)
     if (date) {
-      setSelectedDate(date)
       setValue('dueDate', date)
     }
   }
@@ -124,12 +116,12 @@ export const TaskFormComponent: React.FC<Props> = ({
                 onPress={() => setShowDatePicker(true)}
               >
                 <Text style={styles.dateButtonText}>
-                  {selectedDate ? selectedDate.toDateString() : 'Select Date'}
+                  {dueDate ? formatDueDate(dueDate) : 'Select Date'}
                 </Text>
               </TouchableOpacity>
               {showDatePicker && (
                 <DateTimePicker
-                  value={selectedDate ?? new Date()}
+                  value={dueDate || new Date()}
                   mode="date"
                   display="default"
                   onChange={(e, date) => {

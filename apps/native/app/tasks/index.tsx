@@ -1,27 +1,23 @@
-import React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Pressable,
-  TouchableOpacity,
-} from 'react-native'
+import React, { useCallback } from 'react'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { Stack, useRouter } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
 
+import { StatusBar } from 'expo-status-bar'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 
-import { Task } from '@app/types/task.types'
 import { useTaskStore } from '@app/state/tasks.store'
+
+import { TasksList } from '@app/components/TasksList'
+import { NoTasks } from '@app/components/NoTasks'
+import { Task } from '@app/types/task.types'
 
 export default function TasksPage() {
   const router = useRouter()
   const { tasks } = useTaskStore((store) => store)
 
-  const onItemPressed = (task: Task) => {
+  const onItemPressed = useCallback((task: Task) => {
     router.push(`/tasks/${task.id}`)
-  }
+  }, [])
 
   const onAddTaskPressed = () => {
     router.push('/tasks/new-task')
@@ -40,29 +36,15 @@ export default function TasksPage() {
         }}
       />
 
-      <FlatList
-        data={tasks}
-        contentContainerStyle={styles.taskList}
-        renderItem={({ item }) => (
-          <Pressable
-            onPress={() => onItemPressed(item)}
-            style={styles.taskContainer}
-          >
-            <Text style={styles.taskTitle}>{item.title}</Text>
-            <Text style={styles.taskDesc}>
-              {item.description
-                ? item.description.substring(0, 100) + '...'
-                : ''}
-            </Text>
-          </Pressable>
-        )}
-        keyExtractor={(item) => item.id as string}
-      />
+      {!tasks.length ? (
+        <NoTasks />
+      ) : (
+        <TasksList tasks={tasks} handleItemPress={onItemPressed} />
+      )}
 
       <TouchableOpacity style={styles.addButton} onPress={onAddTaskPressed}>
         <MaterialCommunityIcons name="plus" size={30} color="#FFF" />
       </TouchableOpacity>
-
       <StatusBar style="auto" />
     </View>
   )
@@ -100,7 +82,6 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   taskTitle: {
-    // fontFamily: 'Inter',
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',

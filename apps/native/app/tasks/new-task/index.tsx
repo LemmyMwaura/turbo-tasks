@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
 import { randomUUID } from 'expo-crypto'
@@ -9,8 +9,6 @@ import { TaskFormComponent } from '@app/components/TaskFormComponent'
 import { useTaskStore } from '@app/state/tasks.store'
 
 export default function NewTaskPage() {
-  const [showDatePicker, setShowDatePicker] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date>()
   const router = useRouter()
 
   const { addTask } = useTaskStore((store) => store)
@@ -22,7 +20,7 @@ export default function NewTaskPage() {
     }
 
     addTask(newTask)
-    router.push('/tasks')
+    router.replace('/tasks')
   }
 
   return (
@@ -37,13 +35,8 @@ export default function NewTaskPage() {
           },
         }}
       />
-      <TaskFormComponent
-        selectedDate={selectedDate}
-        showDatePicker={showDatePicker}
-        setShowDatePicker={setShowDatePicker}
-        setSelectedDate={setSelectedDate}
-        onSubmit={onSubmit}
-      />
+
+      <TaskFormComponent onSubmit={onSubmit} />
     </View>
   )
 }

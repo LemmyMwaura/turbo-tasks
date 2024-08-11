@@ -11,10 +11,6 @@ This Turborepo includes the following apps and packages:
 
 All apps and packages are fully written in [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
-
-This Turborepo comes with additional tools pre-configured for you:
-
 ### Getting Started
 
 1. **Install Dependencies:**
@@ -33,7 +29,14 @@ This Turborepo comes with additional tools pre-configured for you:
    yarn run dev
    ```
 
-3. **Build:**
+3. **Development:**
+
+   Run Tests:
+
+   ```sh
+   yarn run test
+
+4. **Build:**
 
    Build the project:
 
@@ -41,7 +44,7 @@ This Turborepo comes with additional tools pre-configured for you:
    yarn run build
    ```
 
-4. **Connect Your Device or Emulator:**
+5. **Connect Your Device or Emulator:**
 
    To run the app on a physical Android/iOS device, install the Expo Go app from the Google Play Store or App Store, then scan the QR code that appears in your terminal. You can also run the app on an Android/iOS emulator.
 

@@ -23,7 +23,7 @@ export default function TaskPage() {
           <h1 className="text-2xl font-bold md:text-3xl">Tasks</h1>
           <Button onClick={handleAddTask}>Add New Task</Button>
         </div>
-        {!tasks ? <TaskList tasks={tasks} /> : <NoTasks />}
+        {tasks ? <TaskList tasks={tasks} /> : <NoTasks />}
       </div>
     </div>
   )

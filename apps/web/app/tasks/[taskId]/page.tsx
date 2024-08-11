@@ -1,12 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import { Metadata } from 'next/types'
+import { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { TaskForm } from '@app/components/TaskForm'
 import { useTaskStore } from '@app/providers/task.store'
 
 import { Task } from '@app/types/task.types'
+import { formatDate } from '@app/utils/date-util'
+
+import { Badge } from '@app/ui/Badge'
+import { Button } from '@app/ui/Button'
+
+import { DeleteTaskModal } from '@app/components/DeleteTaskModal'
+import { EditTaskModal } from '@app/components/EditTaskModal'
 
 const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   const router = useRouter()
@@ -15,13 +22,13 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   const taskId = params.taskId
   const task = getTaskById(taskId)
 
-  const [editModalVisible, setEditModalVisible] = useState(false)
-  const [delModalVisible, setDelModalVisible] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showDelModal, setShowDelModal] = useState(false)
 
   const handleUpdateTask = (data: Task) => {
     if (task) {
       updateTask(taskId, data)
-      setEditModalVisible(false)
+      setShowEditModal(false)
       router.refresh()
     }
   }
@@ -31,97 +38,102 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
     router.push('/tasks')
   }
 
+  const goBack = () => {
+    router.back()
+  }
+
+  const closeDelModal = useCallback(() => {
+    setShowDelModal(false)
+  }, [])
+
+  const closeEditModal = useCallback(() => {
+    setShowEditModal(false)
+  }, [])
+
   if (!taskId) {
     router.push('/not-found')
+    return
   }
 
   if (!task) {
-    return null
+    return
   }
 
   return (
-    <div className="p-6 flex justify-center items-center bg-[#f5e0dc] min-h-screen w-[100vw]">
-      {editModalVisible && (
-        <div className="min-w-[80%] m-auto bg-white p-6 rounded-lg shadow-md">
-          <TaskForm
-            onSubmit={handleUpdateTask}
-            onClose={() => setEditModalVisible(false)}
-            task={task}
-          />
-        </div>
-      )}
-
-      {!editModalVisible && !delModalVisible && (
-        <div className="max-w-lg m-auto bg-white p-6 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
-            {task.title}
-          </h1>
-          <p className="text-gray-600 mb-4">{task.description}</p>
-
-          <div className="mb-4">
-            <div className="flex justify-between mb-2">
-              <span className="font-medium text-gray-600">Status:</span>
-              <span
-                className={`text-lg ${
-                  task.status === 'completed' ? 'text-blue-500' : 'text-red-500'
-                }`}
+    <div className="flex min-h-screen w-full flex-col bg-background justify-center">
+      <main className="container mx-auto px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Task Details
+              </h1>
+              <p className="mt-2 text-muted-foreground">
+                View and manage the details of your task.
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={goBack}>
+                Go Back
+              </Button>
+              <Button variant="outline" onClick={() => setShowEditModal(true)}>
+                Edit
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => setShowDelModal(true)}
               >
-                {task.status}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="font-medium text-gray-600">Due Date:</span>
-              <span className="text-gray-800">
-                {task.dueDate
-                  ? new Date(task.dueDate)
-                      .toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })
-                      .replace(/(\d{1,2})(st|nd|rd|th)?/, '$1')
-                  : 'No due date'}
-              </span>
+                Delete
+              </Button>
             </div>
           </div>
-
-          <div className="flex justify-between mt-4">
-            <button
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold"
-              onClick={() => setEditModalVisible(true)}
-            >
-              Edit Task
-            </button>
-            <button
-              className="bg-red-500 text-white py-2 px-4 rounded-lg font-semibold"
-              onClick={() => setDelModalVisible(true)}
-            >
-              Delete Task
-            </button>
+          <div className="rounded-lg border bg-card p-6 shadow-sm">
+            <div className="grid gap-4">
+              <div>
+                <div className="flex justify-between">
+                  <h2 className="text-xl font-semibold">{task.title}</h2>
+                  <Badge
+                    variant={
+                      task.status === 'in-progress' ? 'inProgress' : task.status
+                    }
+                    className="px-2 py-1 rounded-full"
+                  >
+                    {task.status}
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground">
+                  Compile and submit the Q4 financial report for the company.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <p>
+                  {task.dueDate ? formatDate(task.dueDate.toISOString()) : ''}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-lg font-medium">Description</h3>
+                <p>{task.description}</p>
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </main>
+      <div />
+      <DeleteTaskModal
+        btnName="Delete"
+        isOpen={showDelModal}
+        onClose={closeDelModal}
+        onDelete={handleDelete}
+      />
 
-      {delModalVisible && (
-        <div className="m-auto bg-white p-6 rounded-lg shadow-md">
-          <p>Are you sure you want to delete this task?</p>
-          <div className="flex justify-around mt-4">
-            <button
-              className="bg-red-500 text-white py-2 px-4 rounded-lg font-semibold"
-              onClick={handleDelete}
-            >
-              Yes, Delete
-            </button>
-            <button
-              className="bg-gray-500 text-white py-2 px-4 rounded-lg font-semibold"
-              onClick={() => setDelModalVisible(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+      <EditTaskModal
+        btnName="Edit"
+        isOpen={showEditModal}
+        onClose={closeEditModal}
+        task={task}
+        onSubmit={handleUpdateTask}
+      />
+      <div />
     </div>
   )
 }

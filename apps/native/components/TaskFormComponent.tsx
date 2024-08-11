@@ -16,7 +16,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker'
 
 import { Task, taskSchema } from '@app/types/task.types'
-import { formatDueDate } from '@app/utils/formatDate'
+import { formatDueDate } from '@app/utils/date-util'
 
 interface Props {
   task?: Task

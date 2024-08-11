@@ -1,13 +1,14 @@
 'use client'
 
-import React from 'react'
+import { Metadata } from 'next/types'
 import { useRouter } from 'next/navigation'
 
 import { TaskForm } from '@app/components/TaskForm'
 import { useTaskStore } from '@app/providers/task.store'
 
+import { Card, CardContent, CardHeader, CardTitle } from '@app/ui/Card'
 import { Task } from '@app/types/task.types'
-import { uuid } from 'uuidv4';
+import { uuid } from 'uuidv4'
 
 export default function NewTaskPage() {
   const { addTask } = useTaskStore((store) => store)
@@ -28,11 +29,16 @@ export default function NewTaskPage() {
   }
 
   return (
-    <div className="p-6 w-[100vw] flex flex-col items-center justify-center mx-auto rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Create New Task</h1>
-      <div className="min-w-[80%] m-auto bg-white p-6 rounded-lg shadow-md">
-        <TaskForm onSubmit={handleAddTask} onClose={handleCancel} />
-      </div>
+    <div className="p-6 w-[100vw] h-screen flex flex-col items-center justify-center">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle>Create Task</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <TaskForm onSubmit={handleAddTask} onClose={handleCancel} />
+        </CardContent>
+      </Card>
     </div>
   )
 }

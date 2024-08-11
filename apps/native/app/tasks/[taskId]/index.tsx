@@ -15,7 +15,7 @@ import { Task } from '@app/types/task.types'
 import { TaskFormComponent } from '@app/components/TaskFormComponent'
 import { DeleteConfirmationModal } from '@app/components/DeleteFormModal'
 import { TakeMeHome } from '@app/components/TakeMeHome'
-import { formatDueDate } from '@app/utils/formatDate'
+import { formatDueDate } from '@app/utils/date-util'
 
 export default function TaskDetailsPage() {
   const { taskId } = useLocalSearchParams<{ taskId: string }>()

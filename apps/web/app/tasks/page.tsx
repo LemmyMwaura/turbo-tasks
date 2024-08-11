@@ -6,6 +6,7 @@ import { TaskList } from '@app/components/TaskList'
 import { useTaskStore } from '@app/providers/task.store'
 
 import { Button } from '@app/ui/Button'
+import { NoTasks } from '@app/components/NoTasks'
 
 export default function TaskPage() {
   const router = useRouter()
@@ -20,9 +21,9 @@ export default function TaskPage() {
       <div className=" mx-auto px-4 py-8 md:px-6 md:py-12">
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <h1 className="text-2xl font-bold md:text-3xl">Tasks</h1>
-          <Button className='bg-black text-white' onClick={handleAddTask} variant="secondary">Add New Task</Button>
+          <Button onClick={handleAddTask}>Add New Task</Button>
         </div>
-        {tasks && <TaskList tasks={tasks} />}
+        {!tasks ? <TaskList tasks={tasks} /> : <NoTasks />}
       </div>
     </div>
   )

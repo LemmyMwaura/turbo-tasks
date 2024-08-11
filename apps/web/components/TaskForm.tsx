@@ -1,16 +1,37 @@
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Task, taskSchema } from '@app/types/task.types'
+import { cn } from '@app/utils/cn'
+
+import { Button } from '@app/ui/Button'
+import { Label } from '@app/ui/Label'
+import { Input } from '@app/ui/Input'
+import { Textarea } from '@app/ui/TextArea'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@app/ui/Select'
 
 interface Props {
   task?: Task
+  className?: string
   onClose: () => void
   onSubmit: (data: Task) => void
 }
 
-export const TaskForm: React.FC<Props> = ({ task, onSubmit, onClose }) => {
+export const TaskForm: React.FC<Props> = ({
+  task,
+  onSubmit,
+  onClose,
+  className,
+}) => {
   const { handleSubmit, control } = useForm<Task>({
     defaultValues: {
       title: task?.title ?? '',
@@ -22,143 +43,135 @@ export const TaskForm: React.FC<Props> = ({ task, onSubmit, onClose }) => {
   })
 
   return (
-    <div>
-      <form
-        id="task-form"
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-4 w-full"
-      >
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Title
-          </label>
-          <Controller
-            name="title"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <input
-                  id="title"
-                  {...field}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                  placeholder="Enter task title"
-                />
-                {error && (
-                  <p className="text-red-600 text-sm">{error.message}</p>
-                )}
-              </>
-            )}
-          />
-        </div>
+    <form
+      id="task-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className={cn('space-y-4', className)}
+    >
+      <div className="space-y-1">
+        <Label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Title
+        </Label>
+        <Controller
+          name="title"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <Input
+                id="title"
+                {...field}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                placeholder="Enter task title"
+              />
+              {error && <p className="text-red-600 text-sm">{error.message}</p>}
+            </>
+          )}
+        />
+      </div>
 
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Description
-          </label>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <textarea
-                  id="description"
-                  {...field}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                  placeholder="Enter task description"
-                />
-                {error && (
-                  <p className="text-red-600 text-sm">{error.message}</p>
-                )}
-              </>
-            )}
-          />
-        </div>
+      <div className="space-y-1">
+        <Label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Description
+        </Label>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <Textarea
+                id="description"
+                {...field}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                placeholder="Enter task description"
+              />
+              {error && <p className="text-red-600 text-sm">{error.message}</p>}
+            </>
+          )}
+        />
+      </div>
 
-        <div>
-          <label
-            htmlFor="dueDate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Due Date
-          </label>
-          <Controller
-            name="dueDate"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <input
-                  type="date"
-                  {...field}
-                  value={
-                    field.value
-                      ? new Date(field.value).toISOString().split('T')[0]
-                      : new Date().toISOString().split('T')[0]
-                  }
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    field.onChange(new Date(e.target.value))
-                  }
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                />
-                {error && (
-                  <p className="text-red-600 text-sm">{error.message}</p>
-                )}
-              </>
-            )}
-          />
-        </div>
+      <div className="space-y-1">
+        <Label
+          htmlFor="dueDate"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Due Date
+        </Label>
+        <Controller
+          name="dueDate"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <Input
+                type="date"
+                {...field}
+                value={
+                  field.value
+                    ? new Date(field.value).toISOString().split('T')[0]
+                    : new Date().toISOString().split('T')[0]
+                }
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  field.onChange(new Date(e.target.value))
+                }
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              />
+              {error && <p className="text-red-600 text-sm">{error.message}</p>}
+            </>
+          )}
+        />
+      </div>
 
-        <div>
-          <label
-            htmlFor="status"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Status
-          </label>
-          <Controller
-            name="status"
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-              <>
-                <select
-                  id="status"
-                  {...field}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="completed">Completed</option>
-                </select>
-                {error && (
-                  <p className="text-red-600 text-sm">{error.message}</p>
-                )}
-              </>
-            )}
-          />
-        </div>
+      <div className="space-y-1">
+        <Label
+          htmlFor="status"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Status
+        </Label>
+        <Controller
+          name="status"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <Select
+                {...field}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  <SelectGroup>
+                    <SelectLabel>Status</SelectLabel>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="in-progress">In Progress</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
-        <div className="flex justify-between items-center space-x-4 mt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            onClick={handleSubmit(onSubmit)}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+              {error && <p className="text-red-600 text-sm">{error.message}</p>}
+            </>
+          )}
+        />
+      </div>
+
+      <div className="space-y-1 flex justify-between items-center space-x-4 mt-4">
+        <Button type="button" onClick={onClose} className="bg-black text-white">
+          Cancel
+        </Button>
+
+        <Button type="submit" className="bg-black text-white">
+          {task ? 'Update Task' : 'Create Task'}
+        </Button>
+      </div>
+    </form>
   )
 }

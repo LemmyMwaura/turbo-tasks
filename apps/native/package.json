@@ -8,6 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "test": "jest --watchAll",
     "eject": "expo eject"
   },
   "dependencies": {
@@ -38,9 +39,13 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@expo/webpack-config": "^19.0.0",
+    "@testing-library/react-native": "^12.5.3",
+    "@types/jest": "^29.5.12",
     "@types/react": "^18.2.79",
+    "jest": "^29.7.0",
+    "jest-expo": "^51.0.3",
     "typescript": "^5.3.3"
   }
 }

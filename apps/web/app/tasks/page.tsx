@@ -18,7 +18,7 @@ export default function TaskPage() {
 
   return (
     <div>
-      <div className=" mx-auto px-4 py-8 md:px-6 md:py-12">
+      <div className="mx-auto px-4 py-8 md:px-6 md:py-12">
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <h1 className="text-2xl font-bold md:text-3xl">Tasks</h1>
           <Button onClick={handleAddTask}>Add New Task</Button>

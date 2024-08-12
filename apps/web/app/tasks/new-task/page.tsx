@@ -1,14 +1,14 @@
 'use client'
 
-import { Metadata } from 'next/types'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { uuid } from 'uuidv4'
 
 import { TaskForm } from '@app/components/TaskForm'
 import { useTaskStore } from '@app/providers/task.store'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@app/ui/Card'
 import { Task } from '@app/types/task.types'
-import { uuid } from 'uuidv4'
 
 export default function NewTaskPage() {
   const { addTask } = useTaskStore((store) => store)
@@ -20,6 +20,13 @@ export default function NewTaskPage() {
       id: uuid(),
     }
 
+    toast('Task has been created', {
+      description: new Date().toISOString(),
+      action: {
+        label: 'Undo',
+        onClick: () => console.log('Undo'),
+      },
+    })
     addTask(newTask)
     router.push('/tasks')
   }

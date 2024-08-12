@@ -1,10 +1,11 @@
 'use client'
 
-import { Metadata } from 'next/types'
 import { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 import { useTaskStore } from '@app/providers/task.store'
+import { unstable_batchedUpdates as batchedUpdates } from 'react-dom'
 
 import { Task } from '@app/types/task.types'
 import { formatDate } from '@app/utils/date-util'
@@ -16,8 +17,8 @@ import { DeleteTaskModal } from '@app/components/DeleteTaskModal'
 import { EditTaskModal } from '@app/components/EditTaskModal'
 
 const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
-  const router = useRouter()
   const { getTaskById, updateTask, removeTask } = useTaskStore((store) => store)
+  const router = useRouter()
 
   const taskId = params.taskId
   const task = getTaskById(taskId)
@@ -26,20 +27,31 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   const [showDelModal, setShowDelModal] = useState(false)
 
   const handleUpdateTask = (data: Task) => {
-    if (task) {
-      updateTask(taskId, data)
-      setShowEditModal(false)
-      router.refresh()
-    }
+    updateTask(taskId, data)
+    toast.success('Task has been updated', {
+      description: new Date().toISOString(),
+      action: {
+        label: 'Undo',
+        onClick: () => console.log('Undo'),
+      },
+    })
+    setShowEditModal(false)
   }
 
   const handleDelete = () => {
-    removeTask(taskId)
-    router.push('/tasks')
-  }
+    // we use this to handle zustand's zombie effect on delete -> https://github.com/pmndrs/zustand/issues/302
+    setTimeout(() => {
+      batchedUpdates(() => removeTask(taskId))
+    }, 0)
 
-  const goBack = () => {
-    router.back()
+    toast.success('Task has been deleted', {
+      description: new Date().toISOString(),
+      action: {
+        label: 'Undo',
+        onClick: () => console.log('Undo'),
+      },
+    })
+    router.push('/tasks')
   }
 
   const closeDelModal = useCallback(() => {
@@ -51,12 +63,11 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   }, [])
 
   if (!taskId) {
-    router.push('/not-found')
-    return
+    router.push('tasks')
   }
 
   if (!task) {
-    return
+    return null
   }
 
   return (
@@ -73,7 +84,7 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
               </p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={goBack}>
+              <Button variant="outline" onClick={() => router.back()}>
                 Go Back
               </Button>
               <Button variant="outline" onClick={() => setShowEditModal(true)}>

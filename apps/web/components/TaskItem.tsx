@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -21,7 +23,7 @@ export const TaskItem = ({ task }: { task: Task }) => {
           <div>
             <h3 className="text-lg font-semibold">{task.title}</h3>
             <p className="text-sm text-muted-foreground">
-              {task?.dueDate ? formatDate(task.dueDate.toISOString()) : ''}
+              {formatDate(task?.dueDate)}
             </p>
           </div>
         </div>

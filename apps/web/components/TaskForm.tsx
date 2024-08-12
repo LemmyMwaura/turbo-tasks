@@ -34,10 +34,10 @@ export const TaskForm: React.FC<Props> = ({
 }) => {
   const { handleSubmit, control } = useForm<Task>({
     defaultValues: {
-      title: task?.title ?? '',
-      description: task?.description ?? '',
-      dueDate: task?.dueDate || new Date(),
-      status: task?.status ?? 'pending',
+      title: task?.title ? task.title : undefined,
+      description: task?.description ? task.description : undefined,
+      dueDate: task?.dueDate ? new Date(task.dueDate) : undefined,
+      status: task?.status ? task.status : undefined,
     },
     resolver: zodResolver(taskSchema),
   })
@@ -114,7 +114,7 @@ export const TaskForm: React.FC<Props> = ({
                 value={
                   field.value
                     ? new Date(field.value).toISOString().split('T')[0]
-                    : new Date().toISOString().split('T')[0]
+                    : ''
                 }
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   field.onChange(new Date(e.target.value))

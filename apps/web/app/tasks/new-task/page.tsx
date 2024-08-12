@@ -5,9 +5,10 @@ import { toast } from 'sonner'
 import { uuid } from 'uuidv4'
 
 import { TaskForm } from '@app/components/TaskForm'
-import { useTaskStore } from '@app/providers/task.store'
+import { useTaskStore } from '@app/state/tasks.store'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@app/ui/Card'
+import { formatDate } from '@app/utils/date-util'
 import { Task } from '@app/types/task.types'
 
 export default function NewTaskPage() {
@@ -21,11 +22,7 @@ export default function NewTaskPage() {
     }
 
     toast('Task has been created', {
-      description: new Date().toISOString(),
-      action: {
-        label: 'Undo',
-        onClick: () => console.log('Undo'),
-      },
+      description: formatDate(new Date()),
     })
     addTask(newTask)
     router.push('/tasks')

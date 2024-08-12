@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-import { useTaskStore } from '@app/providers/task.store'
+import { useTaskStore } from '@app/state/tasks.store'
 import { unstable_batchedUpdates as batchedUpdates } from 'react-dom'
 
 import { Task } from '@app/types/task.types'
@@ -29,11 +29,7 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
   const handleUpdateTask = (data: Task) => {
     updateTask(taskId, data)
     toast.success('Task has been updated', {
-      description: new Date().toISOString(),
-      action: {
-        label: 'Undo',
-        onClick: () => console.log('Undo'),
-      },
+      description: formatDate(data.dueDate),
     })
     setShowEditModal(false)
   }
@@ -45,11 +41,7 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
     }, 0)
 
     toast.success('Task has been deleted', {
-      description: new Date().toISOString(),
-      action: {
-        label: 'Undo',
-        onClick: () => console.log('Undo'),
-      },
+      description: formatDate(new Date()),
     })
     router.push('/tasks')
   }
@@ -117,9 +109,7 @@ const TaskDetailsPage = ({ params }: { params: { taskId: string } }) => {
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <p>
-                  {task.dueDate ? formatDate(task.dueDate.toISOString()) : ''}
-                </p>
+                <p>{task && task.dueDate ? formatDate(task?.dueDate) : ''}</p>
               </div>
               <div>
                 <h3 className="text-lg font-medium">Description</h3>

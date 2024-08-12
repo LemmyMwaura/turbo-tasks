@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import { cn } from '@app/utils/cn'
 import { Toaster } from '@app/ui/Toast'
 
-import { TaskStoreProvider } from '../providers/task.store'
+import { TaskStoreHydration } from '../providers/task.store'
 import '../styles/global.css'
 
 export const metadata: Metadata = {
@@ -37,10 +37,9 @@ export default function RootLayout({
       <body
         className={cn('antialiased', fontHeading.variable, fontBody.variable)}
       >
-        <TaskStoreProvider>
-          <main> {children}</main>
-          <Toaster />
-        </TaskStoreProvider>
+        <TaskStoreHydration />
+        <main> {children}</main>
+        <Toaster />
       </body>
     </html>
   )

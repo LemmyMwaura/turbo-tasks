@@ -53,6 +53,8 @@ export const useTaskStore = create<TaskStore>()(
 )
 
 export const seedLocalStorage = () => {
+  if (typeof window === 'undefined') return
+
   const storageKey = `${PREFIX}-tasks`
   const existingData = localStorage.getItem(storageKey)
 

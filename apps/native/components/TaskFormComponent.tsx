@@ -28,10 +28,10 @@ export const TaskFormComponent: React.FC<Props> = ({ task, onSubmit }) => {
   const { control, handleSubmit, setValue, watch } = useForm<Task>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: task?.title || '',
-      description: task?.description || '',
-      dueDate: task?.dueDate ? new Date(task.dueDate) : undefined,
-      status: task?.status || 'pending',
+      title: task ? task.title : undefined,
+      description: task ? task.description : undefined,
+      dueDate: task ? new Date(task.dueDate) : undefined,
+      status: task ? task.status : undefined,
     },
   })
 

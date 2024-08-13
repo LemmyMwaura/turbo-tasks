@@ -21,10 +21,10 @@ export default function NewTaskPage() {
       id: uuid(),
     }
 
+    addTask(newTask)
     toast('Task has been created', {
       description: formatDate(new Date()),
     })
-    addTask(newTask)
     router.push('/tasks')
   }
 
